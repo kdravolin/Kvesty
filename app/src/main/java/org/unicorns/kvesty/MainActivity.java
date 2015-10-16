@@ -2,10 +2,13 @@ package org.unicorns.kvesty;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.unicorns.kvesty.adapter.QuestHolderAdapter;
 import org.unicorns.kvesty.dao.QuestHolderDao;
 import org.unicorns.kvesty.entity.QuestHolder;
 
@@ -19,19 +22,38 @@ import retrofit.Retrofit;
 
 public class MainActivity extends ActionBarActivity {
 
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private QuestHolderAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.parse.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
 
-        QuestHolderDao questHolderDao = retrofit.create(QuestHolderDao.class);
-        Call<QuestHolder> questHolderCall = questHolderDao.getQuestHolder("A4kFIy2xkO");
-        questHolderCall.enqueue(cb);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new QuestHolderAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://api.parse.com")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//
+//        QuestHolderDao questHolderDao = retrofit.create(QuestHolderDao.class);
+//        Call<QuestHolder> questHolderCall = questHolderDao.getQuestHolder("A4kFIy2xkO");
+//        questHolderCall.enqueue(cb);
     }
 
     Callback<QuestHolder> cb = new Callback<QuestHolder>() {
