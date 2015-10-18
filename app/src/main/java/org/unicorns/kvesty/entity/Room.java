@@ -1,10 +1,10 @@
 package org.unicorns.kvesty.entity;
 
 
-public class QuestRoom {
+public class Room {
     public long id;
-    public long holderId;
-    public String name;
+    public long companyId;
+    public String title;
     public String image;
     public String description;
 }

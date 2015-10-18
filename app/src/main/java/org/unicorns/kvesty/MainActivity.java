@@ -1,75 +1,38 @@
 package org.unicorns.kvesty;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.unicorns.kvesty.adapter.QuestHolderAdapter;
-import org.unicorns.kvesty.dao.QuestHolderDao;
-import org.unicorns.kvesty.entity.QuestHolder;
+import org.unicorns.kvesty.adapter.RoomAdapter;
+import org.unicorns.kvesty.entity.Room;
+import org.unicorns.kvesty.fragment.RoomListFragment;
 
-import java.io.IOException;
+import java.util.List;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private QuestHolderAdapter mAdapter;
+    private RoomAdapter mAdapter;
+    private List<Room> mQuestHolders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new QuestHolderAdapter();
-        mRecyclerView.setAdapter(mAdapter);
-
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://api.parse.com")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//
-//        QuestHolderDao questHolderDao = retrofit.create(QuestHolderDao.class);
-//        Call<QuestHolder> questHolderCall = questHolderDao.getQuestHolder("A4kFIy2xkO");
-//        questHolderCall.enqueue(cb);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        RoomListFragment fragment = new RoomListFragment();
+        fragmentTransaction.add(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
     }
-
-    Callback<QuestHolder> cb = new Callback<QuestHolder>() {
-        @Override
-        public void onResponse(Response<QuestHolder> response, Retrofit retrofit) {
-            Log.e("KV", "OK");
-            QuestHolder questHolder = response.body();
-            String s = questHolder.name;
-        }
-
-        @Override
-        public void onFailure(Throwable t) {
-            Log.e("KV", "FAIL");
-        }
-    };
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
